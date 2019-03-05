@@ -1,0 +1,29 @@
+<%-include('./include/head.ejs')%>
+
+<body>
+    <%-include('./include/navigation.ejs')%>
+
+    <main>
+        <div class="container mt-5">
+            <div class="row">
+            <div class="card-deck">
+            <% if (prods.length > 0) { %>
+                <% for(let product in prods) {%>
+                <div class="card border-success mb-3" style="max-width: 18rem;">
+                    <div class="card-header bg-transparent border-success"><%=prods[product].title%></div>
+                    <div class="card-body text-success">
+                        <h5 class="card-title">Success card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-success">Footer</div>
+                </div>
+                <%}%>
+            <%} else {%>
+                <h2>There is no product</h2>
+            <%}%>
+            </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
