@@ -1,0 +1,19 @@
+<%-include('../include/head.ejs')%>
+
+<body>
+    <%-include('../include/navigation.ejs')%>
+
+    <main class="text-center text-center" >
+        <h1><%=product.title%></h1>
+        <img src="<%= product.imgUrl%>" alt="<%=product.title%>">
+        <h1><%=product.price%></h1>
+        <h2><%=product.description%></h2>
+
+        <form class="mt-4" method="POST" action="/add-to-cart" >
+            <button class="btn btn-warning" type="submit" >Add To Cart</button>
+            <input type="hidden" name="id" value="<%=product.id%>">
+            <input type="hidden" name="productPrice" value="<%=product.price%>">
+        </form>
+    </main>
+</body>
+</html>

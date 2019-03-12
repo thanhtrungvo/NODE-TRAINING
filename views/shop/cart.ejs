@@ -1,0 +1,30 @@
+<%-include('../include/head.ejs')%>
+
+<body>
+    <%-include('../include/navigation.ejs')%>
+    <div class="container mt-5">
+    <div class="row">
+    <div class="card-deck">
+    <% if (prods.length > 0) { %>
+        <% prods.map((product)=>{%>
+        <div class="card" style="width: 18rem;">
+        <img src="<%=product.imgUrl%>" class="card-img-top" alt="...">
+        <div class="card-body text-center">
+          <h1 class="card-title text-center text-info"><%=product.title%></h1>
+          <p class="card-text"><%=product.description%></p>
+          <h3 >$<%=product.price%></h3>
+          <h3 >Quanity: <%=product.qty%></h3>
+          <a href="/product/<%=product.id%>" class="btn btn-success mt-2"  >Details</a>
+        </div>
+      </div>
+        <%})%>
+    <%} else {%>
+        <h2>There is no product</h2>
+    <%}%>
+    </div>
+    </div>
+    <h1>Total Price:<%=totalPrice%></h1>
+
+</div>
+</body>
+</html>

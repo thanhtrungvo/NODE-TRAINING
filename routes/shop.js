@@ -1,7 +1,19 @@
 const express = require('express');
-const path = require('path');
 const routes = express.Router();
-const productControler = require('../controler/products')
-routes.get('/', productControler.getProducts)
+const shopControler = require('../controler/shop')
+
+routes.get('/', shopControler.getHomePage)
+
+routes.get('/product-list', shopControler.getProductList )
+
+routes.get('/product/:id', shopControler.getProduct ) // always put /products/:id at the bottom unless this route will handle all request to /product/...
+
+routes.get('/cart', shopControler.getCard)
+
+routes.post('/add-to-cart', shopControler.postAddProductToCart)
+
+// routes.get('/orders', shopControler.getOrders)
+
+// routes.get('/checkout', shopControler.getCheckout )
 
 module.exports = routes;

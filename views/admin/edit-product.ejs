@@ -1,0 +1,46 @@
+<%-include('../include/head.ejs')%>
+<body>
+
+    <%-include('../include/navigation.ejs')%>
+    <main>
+        <div class="container">
+        <div class="row">
+            <form class="product-form" action="/admin/<%=editProduct?'edit-product':'add-product'%>" method="POST" >
+
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">title</span>
+                    </div>
+                    <input type="text" aria-label="First name" name="title" class="form-control" value="<%=editProduct?product.title:''%>" >
+                </div>
+                
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Image Url</span>
+                    </div>
+                    <input type="text" aria-label="First name" name="imgUrl" value="<%=editProduct?product.imgUrl:''%>" class="form-control">
+                </div>
+                
+
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Price</span>
+                    </div>
+                    <input type="number" aria-label="First name" value="<%=editProduct?product.price:''%>" name="price" class="form-control" step="0.01" >
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" rows="3" name="description" ><%=editProduct?product.description:''%></textarea>
+                </div>
+                <%if(editProduct){%>
+                    <input type="hidden" name="id" value="<%=product.id%>" >
+                <%}%>
+
+                <button type="submit" class="btn btn-outline-success ml-5"><%= editProduct ? "Edit Product" : "Add Product"%></button>
+            </form>
+        </div>
+        </div>
+    </main>
+</body>
+</html>

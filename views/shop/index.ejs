@@ -1,0 +1,30 @@
+<%-include('../include/head.ejs')%>
+
+<body>
+    <%-include('../include/navigation.ejs')%>
+
+    <main>
+        <div class="container mt-5">
+            <div class="row">
+            <div class="card-deck">
+            <% if (prods.length > 0) { %>
+                <% for(let product in prods) {%>
+                <div class="card" style="width: 18rem;">
+                <img src="<%=prods[product].imgUrl%>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h1 class="card-title text-center text-info"><%=prods[product].title%></h1>
+                  <p class="card-text"><%=prods[product].description%></p>
+                  <h3 class="text-center">$<%=prods[product].price%></h3>
+                </div>
+              </div>
+
+                <%}%>
+            <%} else {%>
+                <h2>There is no product</h2>
+            <%}%>
+            </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<%-include('../include/head.ejs')%>
+
+<body>
+    <%-include('../include/navigation.ejs')%>
+
+    <main>
+        <div class="container mt-5">
+            <div class="row">
+            <div class="card-deck">
+            <% if (prods.length > 0) { %>
+                <% for(let product in prods) {%>
+                <div class="card" style="width: 18rem;">
+                <img src="<%=prods[product].imgUrl%>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h1 class="card-title text-center text-info"><%=prods[product].title%></h1>
+                  <p class="card-text"><%=prods[product].description%></p>
+                  <h3 class="text-center">$<%=prods[product].price%></h3>
+                  <div class="text-center">
+                  <form action="/admin/edit-product/<%=prods[product].id%>" method="GET">
+                    <button class="btn btn-success" type="submit">Edit</button> 
+                    <input type="hidden" name="edit" value="true">
+                    <input type="hidden" name="title" value="new">
+                </form>
+                    <form action="/admin/delete-product" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>  
+                        <input type="hidden" name="id" value="<%=prods[product].id%>" >
+                        <input type="hidden" name="price" value="<%=prods[product].price%>" >
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+                <%}%>
+            <%} else {%>
+                <h2>There is no product</h2>
+            <%}%>
+            </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
