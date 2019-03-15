@@ -34,7 +34,7 @@
                     <textarea class="form-control" id="description" rows="3" name="description" ><%=editProduct?product.description:''%></textarea>
                 </div>
                 <%if(editProduct){%>
-                    <input type="hidden" name="id" value="<%=product.id%>" >
+                    <input type="hidden" name="id" value="<%=product._id%>" >
                 <%}%>
 
                 <button type="submit" class="btn btn-outline-success ml-5"><%= editProduct ? "Edit Product" : "Add Product"%></button>

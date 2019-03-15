@@ -1,4 +1,3 @@
-const db = require('../utils/database')
 const Product = require('../model/products')
 
 const getAddProductPage = (req, res, next)=>{
@@ -14,27 +13,24 @@ const getEditProductPage = (req, res, next)=>{
         return res.redirect('/')
     }
     const id = req.params.id;
-    req.user.getProducts({
-        where: {id: id}
-    }).then(product =>{
+    Product.findById(id).then(product=>{
         res.render('admin/edit-product',{
             title: "Edit Product Page", 
             path:"/admin/add-product",
             editProduct: editMode,
-            product: product[0]
+            product: product
         })
     }).catch(err =>{
         console.log(err)
     })
-
 }
 const postAddProduct = (req, res, next)=>{
     const title = req.body.title;
     const imgUrl = req.body.imgUrl;
     const price = req.body.price; 
     const description = req.body.description;
-    const userId = req.user.userId;
-    const product = new Product(null, title, imgUrl, description, price, userId)
+    const userId = req.user._id;
+    const product = new Product(title, price, description, imgUrl, userId)
     product.save().then(task =>{
         console.log('add '+ title + ' successfully')
         res.redirect('/admin/product-list')
@@ -49,28 +45,17 @@ const postEditProduct = (req, res, next)=>{
     const price = req.body.price;
     const description = req.body.description;
     const id = req.body.id;
-    // const product = new Product(title, imgUrl, description, price, id );
-    // console.log(product)
-    // product.save();
-    Product.findById(id)
-    .then(product=>{
-        product.title = title;
-        product.imgUrl = imgUrl;
-        product.price = price;
-        product.description = description;
-        return product.save();
-    })
-    .then(()=>{
+    const product = new Product(title, price, description, imgUrl);
+    product.update(id).then(result =>{
+        // console.log(result);
         res.redirect('/admin/product-list')
-    })
-    .catch(err =>{
+    }).catch(err =>{
         console.log(err)
     })
 }
 
 const getProducts = (req, res, next)=>{
-    const userId = req.user.userId;
-    Product.fetchProductsWithUserId(userId).then(([products, info]) =>{
+    Product.fetchAll().then(products =>{
         res.render('admin/products', 
         {prods: products, 
         title: 'Admin Product', 
@@ -81,13 +66,10 @@ const getProducts = (req, res, next)=>{
 }
 
 const postDeleteProduct = (req, res, next)=>{
-    const id = req.body.id;
-    const price = req.body.price;
-    Product.findById(id).then(product=>{
-        if(product){
-            return product.destroy()
-        }
-    }).then(result =>{
+    const productId = req.body.id;
+
+    Product.deleteById(productId).then(result=>{
+        console.log(result)
         res.redirect('/admin/product-list')
     }).catch(err =>{
         console.log(err)

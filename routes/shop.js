@@ -11,8 +11,10 @@ routes.get('/product/:id', shopControler.getProduct ) // always put /products/:i
 routes.get('/cart', shopControler.getCard)
 
 routes.post('/add-to-cart', shopControler.postAddProductToCart)
+routes.post('/cart', shopControler.postDeleteCart)
 
-// routes.get('/orders', shopControler.getOrders)
+routes.get('/orders', shopControler.getOrders)
+routes.post('/orders', shopControler.postOrders)
 
 // routes.get('/checkout', shopControler.getCheckout )
 

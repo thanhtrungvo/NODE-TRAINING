@@ -16,14 +16,14 @@
                   <p class="card-text"><%=prods[product].description%></p>
                   <h3 class="text-center">$<%=prods[product].price%></h3>
                   <div class="text-center">
-                  <form action="/admin/edit-product/<%=prods[product].id%>" method="GET">
+                  <form action="/admin/edit-product/<%=prods[product]._id%>" method="GET">
                     <button class="btn btn-success" type="submit">Edit</button> 
                     <input type="hidden" name="edit" value="true">
                     <input type="hidden" name="title" value="new">
                 </form>
                     <form action="/admin/delete-product" method="POST">
                         <button class="btn btn-danger" type="submit">Delete</button>  
-                        <input type="hidden" name="id" value="<%=prods[product].id%>" >
+                        <input type="hidden" name="id" value="<%=prods[product]._id%>" >
                         <input type="hidden" name="price" value="<%=prods[product].price%>" >
                     </form>
                   </div>

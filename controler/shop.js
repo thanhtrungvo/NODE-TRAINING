@@ -2,9 +2,10 @@ const Product = require('../model/products')
 const Cart = require('../model/cart');
 
 const getProductList = (req, res, next)=>{
-    Product.fetchAll().then( ([arrayProducts, config]) =>{
+    Product.fetchAll()
+    .then( (products) =>{
         res.render('shop/products-list', {
-                    prods: arrayProducts, 
+                    prods: products, 
                     title: 'Shop', 
                     path: "/products"}
             )
@@ -13,10 +14,9 @@ const getProductList = (req, res, next)=>{
     })
 }
 const getHomePage = (req, res, next)=>{
-    Product.fetchAll().then( ([arrayProducts, config]) =>{
-        // console.log(arrayProducts);
+    Product.fetchAll().then( products =>{
         res.render('shop/index', {
-            prods: arrayProducts, 
+            prods: products, 
             title: 'Shop', 
             path: "/"
         })
@@ -27,7 +27,7 @@ const getHomePage = (req, res, next)=>{
 
 const getProduct = (req, res, next)=>{
     const id = req.params.id;
-    Product.findById(id).then(product =>{
+    Product.findById(id).then((product) =>{
         res.render('shop/product-detail', {
             title: "Product Detail",
             product : product,
@@ -39,23 +39,29 @@ const getProduct = (req, res, next)=>{
 }
 
 const getCard = (req, res, next) =>{
-    const userId = req.user.userId;
-    const cart = new Cart(null, userId);
-    cart.fetchAllInCart().then( ([listResults, info]) =>{
-        res.render('shop/cart', {
+    req.user.getCart().then(products =>{
+        let totalPrice = 0;
+        products.map( e =>{
+            const price = parseFloat(e.price);
+            totalPrice = totalPrice + price*e.quantity
+        })
+            res.render('shop/cart', {
             path: '/cart',
             title:'Your Card',
-            prods: listResults,
-            totalPrice: 0
+            prods: products,
+            totalPrice: totalPrice
         })
     })
 }
 const postAddProductToCart = (req, res, next)=>{
 
-    const id = req.body.id;
-    const productPrice = req.body.productPrice;
-    Cart.addProductToCart(id, productPrice)
-    res.redirect(`/cart`)
+    const productId = req.body.id;
+    Product.findById(productId).then(product =>{
+        return req.user.addToCart(product)
+    }).then(result =>{
+        // console.log(result)
+        res.redirect(`/cart`)
+    })
 }
 const getCheckout = (req, res, next) =>{
     res.render('shop/checkout', {
@@ -63,19 +69,39 @@ const getCheckout = (req, res, next) =>{
         title: 'Checkout Page'
     })
 }
+const postDeleteCart = (req, res, next)=>{
+    const  UserObject = req.user;
+    const productId = req.body.productId;
+
+    UserObject.postDeleteCart(productId).then(result=>{
+        res.redirect('/cart')
+    })
+}
 
 const getOrders = (req, res, next)=>{
+    
     res.render('shop/orders', {
         path: "/orders",
         title: "Orders Page"
     })
 }
+const postOrders = (req, res, next)=>{
+    let fetchedCart;
+    req.user.addOrder()
+    .then(result =>{
+        res.redirect('/orders')
+    })
+    .catch(err =>{
+        console.log(err)
+    })
+}
 module.exports = {
     getHomePage, 
     getProductList, 
+    getProduct,
+    postAddProductToCart,
     getCard,
-    getCheckout,
-    getOrders,
-    getProduct, 
-    postAddProductToCart
+    postDeleteCart,
+    postOrders,
+    getOrders
 };

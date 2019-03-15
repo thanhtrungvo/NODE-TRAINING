@@ -1,25 +1,58 @@
-const db = require('../utils/database')
-
+const getDb = require('../utils/database').getDb;
+const mongdb = require('mongodb');
 class Product{
-    constructor(id, title, imgUrl, description, price, userId ){
-        this.id = id,
-        this.title = title,
-        this.imgUrl = imgUrl,
-        this.description = description,
-        this.price = price,
-        this.userId = userId
+    constructor(title, price, description, imgUrl, userId){
+        this.title = title;
+        this.price = price;
+        this.description = description;
+        this.imgUrl = imgUrl;
+        this.userId = userId;
     }
+
     save(){
-        return db.execute(`insert into product (title, imgUrl, price, description, userId) values
-        (?,?,?,?,?)`,[this.title, this.imgUrl, this.price, this.description, this.userId])
+        const db = getDb();
+        return db.collection('products').insertOne(this)
+            .then(result =>{
+                return result
+            })
+            .catch(err =>{
+                console.log(err)
+            }
+        )
     }
+
+    update(id){
+        const db = getDb()
+        return db.collection('products').updateOne({_id: new mongdb.ObjectId(id)}, {$set: this})
+    }
+
     static fetchAll(){
-        return db.execute('select * from product')
+        const db = getDb();
+        return db.collection('products').find().toArray()
+            .then(result=>{
+                return result
+            })
+            .catch(err =>{
+                console.log(err)
+            })
     }
 
-    static fetchProductsWithUserId(userId){
-        return db.execute('select * from product where userId = ?',[userId])
+    static findById(productId){
+        const db = getDb();
+        return db.collection('products').find({_id: new mongdb.ObjectId(productId) }).next()
+        .then(result=>{
+            return result;
+        })
+        .catch(err =>{
+            console.log(err)
+        })
+    }   
 
+    static deleteById(productId){
+        const db = getDb();
+        return db.collection('products').remove({
+            _id: {$eq: new mongdb.ObjectId(productId)}
+        })
     }
 }
 
